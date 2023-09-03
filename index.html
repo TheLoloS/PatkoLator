@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- block devince rotate -->
+    <meta name="screen-orientation" content="portrait" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+    <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
+    <meta name="apple-mobile-web-app-title" content="PatkoLator" />
+    <meta name="application-name" content="PatkoLator" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="Mój Kalkulator" />
+    <title>PatkoLator</title>
+    <style>
+      ::placeholder {
+        color: black;
+      }
+      .btn {
+        width: 100%;
+        margin: 2px;
+        height: 10vh;
+        background: linear-gradient(
+          145deg,
+          rgba(244, 156, 242, 1) 35%,
+          rgba(196, 0, 255, 1) 100%
+        );
+        color: black;
+        border: 0;
+        cursor: pointer;
+        font-size: 4vh;
+      }
+      .btn:hover {
+        transform: scale(1.03);
+        transition: 0.1s;
+      }
+      .btn:active {
+        transform: scale(0.97);
+        transition: 0.1s;
+      }
+    </style>
+  </head>
+  <body style="background-color: black; margin: 0; padding: 0">
+    <div
+      id="history"
+      style="
+        position: relative;
+        color: rgb(218, 144, 228);
+        text-align: center;
+        padding-top: 3vh;
+        text-transform: uppercase;
+        overflow-y: scroll;
+        max-height: 9vh;
+      "
+    >
+      <h1>Kalkulator Patki 💕</h1>
+    </div>
+    <h1 style="color: rgb(234, 126, 195); text-align: center; margin: 0">↓</h1>
+    <div
+      style="
+        width: 480px;
+        margin: auto;
+        max-width: 95vw;
+        /* height: 100dvh; */
+        display: flex;
+        flex-direction: column;
+      "
+    >
+      <input
+        type="text"
+        placeholder="Wpisz coś..."
+        style="
+          width: 93%;
+          height: 20vh;
+          border: pink 1px solid;
+          padding-left: 5%;
+          font-size: 4vh;
+          margin: 4px;
+          background: linear-gradient(
+            145deg,
+            rgba(244, 156, 242, 1) 35%,
+            rgba(196, 0, 255, 1) 100%
+          );
+          color: black;
+          margin-top: 5vh;
+        "
+      />
+
+      <div
+        style="
+          display: flex;
+          flex-direction: row;
+          justify-content: space-evenly;
+          /* margin-top: auto; */
+        "
+      >
+        <div style="display: flex; flex-direction: column; width: 24%">
+          <button class="btn">1</button>
+          <button class="btn">4</button>
+          <button class="btn">7</button>
+          <button class="btn">+</button>
+          <button class="btn">(</button>
+        </div>
+        <div style="display: flex; flex-direction: column; width: 24%">
+          <button class="btn">2</button>
+          <button class="btn">5</button>
+          <button class="btn">8</button>
+          <button class="btn">0</button>
+          <button class="btn">)</button>
+        </div>
+        <div style="display: flex; flex-direction: column; width: 24%">
+          <button class="btn">3</button>
+          <button class="btn">6</button>
+          <button class="btn">9</button>
+          <button class="btn">-</button>
+          <button class="btn">.</button>
+        </div>
+
+        <div style="display: flex; flex-direction: column; width: 24%">
+          <button class="btn">*</button>
+          <button class="btn">/</button>
+          <button id="cofnij" class="btn" style="height: 15vh">←</button>
+          <button id="wynik" class="btn" style="height: 15.5vh">=</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      let history = [];
+      const wszystkiePrzyciski = document.querySelectorAll("button");
+      const przyciski = [...wszystkiePrzyciski];
+      const pole = document.querySelector("input");
+      przyciski.map((e) => {
+        e.onclick = () => {
+          const wartosc = e.innerText;
+          console.log(wartosc);
+          pole.value = pole.value + wartosc;
+        };
+      });
+      const przyciskWyniku = document.querySelector("#wynik");
+      const cofnij = document.querySelector("#cofnij");
+      przyciskWyniku.onclick = () => {
+        if (pole.value === "") {
+          return;
+        }
+        try {
+          history.push(pole.value);
+          document.querySelector("#history").innerHTML = "";
+          history.map((e) => {
+            const h1 = document.createElement("h1");
+            h1.innerText = e;
+            h1.onclick = () => {
+              pole.value = e;
+            };
+            document
+              .querySelector("#history")
+              .insertBefore(h1, document.querySelector("#history").firstChild);
+          });
+          const wynik = eval(pole.value);
+          pole.value = eval(pole.value);
+        } catch (error) {
+          window.alert("podaj tylko liczby");
+        }
+      };
+      cofnij.onclick = () => {
+        pole.value = pole.value.slice(0, -1);
+      };
+      onkeypress = (event) => {
+        if (event.key === "Enter") {
+          event.preventDefault();
+          try {
+            history.push(pole.value);
+            document.querySelector("#history").innerHTML = "";
+            history.map((e) => {
+              const h1 = document.createElement("h1");
+              h1.innerText = e;
+              h1.onclick = () => {
+                pole.value = e;
+              };
+              h1.style.cursor = "pointer";
+
+              document
+                .querySelector("#history")
+                .insertBefore(
+                  h1,
+                  document.querySelector("#history").firstChild
+                );
+            });
+            const wynik = eval(pole.value);
+            pole.value = eval(pole.value);
+          } catch (error) {
+            window.alert("podaj tylko liczby");
+          }
+        }
+      };
+    </script>
+  </body>
+</html>
